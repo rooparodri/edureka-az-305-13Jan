@@ -1,0 +1,7 @@
+edureka-az-305-13Jan/
+    Jenkinsfile
+    sql/
+        create_tables.sql
+        load_raw.sql
+        transform_stage.sql
+        scd2_merge.sql

@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SNOWSQL_ACCOUNT = 'DALZFBS-GA79979'
-        SNOWSQL_REGION  = 'US'
+        SNOWSQL_ACCOUNT = "DALZFBS-GA79979"
+        SNOWSQL_REGION  = "us-east-1"
             }
 
     stages {

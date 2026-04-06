@@ -1,7 +1,18 @@
-edureka-az-305-13Jan/
-    Jenkinsfile
-    sql/
-        create_tables.sql
-        load_raw.sql
-        transform_stage.sql
-        scd2_merge.sql
+--File → Stage → COPY INTO → Raw Table → Validation → SCD2 Merge → Fact Table
+USE DATABASE db_fidelity;
+
+CREATE OR REPLACE FILE FORMAT ff_salary
+  TYPE = 'CSV'
+  FIELD_DELIMITER = '|'
+  SKIP_HEADER = 0
+  NULL_IF = ('NULL', '');
+
+CREATE OR REPLACE STAGE stg_salary
+  FILE_FORMAT = ff_salary;
+
+CREATE OR REPLACE TABLE raw_salary (
+    EMP_ID STRING,
+    ROLE STRING,
+    SALARY STRING
+);
+

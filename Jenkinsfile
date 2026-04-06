@@ -19,6 +19,7 @@ pipeline {
             steps {
                 echo "Executing SQL scripts in Snowflake..."
 
+                
                 withCredentials([usernamePassword(
                     credentialsId: 'snowflake-creds',
                     usernameVariable: 'SNOWSQL_USER',
@@ -29,7 +30,7 @@ pipeline {
                         snowsql ^
                           -a %SNOWSQL_ACCOUNT% ^
                           -u %SNOWSQL_USER% ^
-                          -p %SNOWSQL_USER_PSW% ^
+                          -p "%SNOWSQL_USER_PSW%"
                           -q "select current_version();"
                     """
                 }

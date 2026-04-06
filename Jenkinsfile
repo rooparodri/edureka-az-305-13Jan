@@ -1,40 +1,38 @@
 pipeline {
     agent any
+
     environment {
-        SNOWSQL_ACCOUNT = "your_account.region"
-        SNOWSQL_USER = credentials('snowflake-creds')
-        SNOWSQL_WAREHOUSE = "COMPUTE_WH"
-        SNOWSQL_DB = "MYDB"
-        SNOWSQL_SCHEMA = "PUBLIC"
+         SNOWSQL_ACCOUNT = "DALZFBS-GA79979"
+        SNOWSQL_REGION  = "us-east-1"
     }
+
     stages {
+
         stage('Checkout') {
             steps {
                 echo "Pulling code from GitHub..."
                 checkout scm
             }
         }
+
         stage('Run Snowflake Scripts') {
             steps {
                 echo "Executing SQL scripts in Snowflake..."
-                // Run RAW load
-                sh """
-                snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER_USR -p $SNOWSQL_USER_PSW \
-                -w $SNOWSQL_WAREHOUSE -d $SNOWSQL_DB -s $SNOWSQL_SCHEMA \
-                -f sql/load_raw.sql
-                """
-                // Run STAGE transform
-                sh """
-                snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER_USR -p $SNOWSQL_USER_PSW \
-                -w $SNOWSQL_WAREHOUSE -d $SNOWSQL_DB -s $SNOWSQL_SCHEMA \
-                -f sql/transform_stage.sql
-                """
-                // Run SCD2 merge
-                sh """
-                snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER_USR -p $SNOWSQL_USER_PSW \
-                -w $SNOWSQL_WAREHOUSE -d $SNOWSQL_DB -s $SNOWSQL_SCHEMA \
-                -f sql/scd2_merge.sql
-                """
+
+                withCredentials([usernamePassword(
+                    credentialsId: 'snowflake-creds',
+                    usernameVariable: 'SNOWSQL_USER',
+                    passwordVariable: 'SNOWSQL_USER_PSW'
+                )]) {
+
+                    bat """
+                        snowsql ^
+                          -a %SNOWSQL_ACCOUNT% ^
+                          -u %SNOWSQL_USER% ^
+                          -p %SNOWSQL_USER_PSW% ^
+                          -q "select current_version();"
+                    """
+                }
             }
         }
     }

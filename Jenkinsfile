@@ -1,9 +1,11 @@
 pipeline {
     agent any
+
     environment {
-        SNOWSQL_ACCOUNT = "your_account_here"
-        SNOWSQL_REGION  = "your_region_here"
+        SNOWSQL_ACCOUNT = "your_account"
+        SNOWSQL_REGION  = "your_region"
     }
+
     stages {
 
         stage('Checkout') {
@@ -12,15 +14,17 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Run Snowflake Scripts') {
             steps {
                 echo "Executing SQL scripts in Snowflake..."
+
                 withCredentials([usernamePassword(
                     credentialsId: 'snowflake-creds',
                     usernameVariable: 'SNOWSQL_USER',
                     passwordVariable: 'SNOWSQL_USER_PSW'
                 )]) {
-                    // Windows uses bat, not sh
+
                     bat """
                         snowsql ^
                           -a %SNOWSQL_ACCOUNT% ^

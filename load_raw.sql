@@ -1,22 +1,3 @@
---File → Stage → COPY INTO → Raw Table → Validation → SCD2 Merge → Fact Table
-USE DATABASE db_fidelity;
-
-CREATE OR REPLACE FILE FORMAT ff_salary
-  TYPE = 'CSV'
-  FIELD_DELIMITER = '|'
-  SKIP_HEADER = 0
-  NULL_IF = ('NULL', '');
-
-CREATE OR REPLACE STAGE stg_salary
-  FILE_FORMAT = ff_salary;
-
-CREATE OR REPLACE TABLE raw_salary (
-    EMP_ID STRING,
-    ROLE STRING,
-    SALARY STRING
-);
-
-
 USE DATABASE DB_FIDELITY;
 COPY INTO raw_salary
 FROM @stg_salary/tb_emp_salary

@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        SNOWSQL_ACCOUNT = "your_account.region"
-        SNOWSQL_USER = credentials('snowflake-creds')
+        SNOWSQL_ACCOUNT = "dalzfbs"
+        SNOWSQL_USER = credentials('ROOPARODRI/007James20242024')
         SNOWSQL_WAREHOUSE = "COMPUTE_WH"
         SNOWSQL_DB = "MYDB"
         SNOWSQL_SCHEMA = "PUBLIC"
